@@ -1,0 +1,5 @@
+  version: 1
+  type: pipeline-template
+
+  name: Example template (build file)
+  description: simplified Example template

@@ -1,0 +1,60 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    def buildStageW = { buildEngine, steps ->
+                        steps.echo "----------------------START ->> Build Source ----------------------"
+                        buildEngine.each { buildStep ->
+                            def modelId = buildStep.model.id
+                            if (modelId.contains("Auxiliary_Build_Ant")) {
+                                steps.echo "Windows not support Ant Build"
+                            } else if (modelId.contains("Auxiliary_Build_Maven")) {
+                                steps.echo "Windows not support Maven Build"
+                            } else if (modelId.contains("Auxiliary_Build_Shell")) {
+                                steps.echo "Windows machines do not support Shell script"
+                            } else if (modelId.contains("Auxiliary_Build_Batch")) {
+                                if (steps.isUnix()) {
+                                    steps.echo "Linux machines do not support batch script"
+                                } else {
+                                    steps.echo "Executing Batch Script"
+                                }
+                            } else if (modelId.contains("Auxiliary_Build_Gradle")) {
+                                steps.echo "Windows not support Gradle Build"
+                            } else if (modelId.contains("Auxiliary_Python")) {
+                                steps.echo "Windows not support Python Build"
+                            } else if (modelId.contains("Auxiliary_Build_Docker")) {
+                                steps.echo "Windows not support Docker Build"
+                            } else if (modelId.contains("Auxiliary_CopyFiles")) {
+                                steps.echo "Copy files from Source to Destination Directory"
+                            } else if (modelId.contains("Auxiliary_Build_Npm")) {
+                                steps.echo "Windows not support Npm"
+                            } else {
+                                steps.echo "Invalid build model."
+                            }
+                        }
+                        steps.echo "----------------------END ->> Build Source ----------------------"
+                    }
+
+                    def buildEngine = [
+                        [model: [id: 'Auxiliary_Build_Ant']],
+                        [model: [id: 'Auxiliary_Build_Maven']],
+                        [model: [id: 'Auxiliary_Build_Shell']],
+                        [model: [id: 'Auxiliary_Build_Batch']],
+                        [model: [id: 'Auxiliary_Build_Gradle']],
+                        [model: [id: 'Auxiliary_Python']],
+                        [model: [id: 'Auxiliary_Build_Docker']],
+                        [model: [id: 'Auxiliary_CopyFiles']],
+                        [model: [id: 'Auxiliary_Build_Npm']],
+                        [model: [id: 'Auxiliary_Build_Helm']],
+                        [model: [id: 'Auxiliary_Build_Composer']]
+                    ]
+
+                    buildStageW(buildEngine, this)
+                }
+            }
+        }
+    }
+}
