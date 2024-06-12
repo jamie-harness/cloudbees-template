@@ -17,7 +17,7 @@ pipeline {
         stage('Initialize') {
             steps {
                 script {
-                    buildScript = load "${env.WORKSPACE}/templates/MavenBuild/SimpleMavenBuild.groovy"
+                    buildScript = load "cloudbees-template/templates/MavenBuild/SimpleMavenBuild.groovy"
                 }
             }
         }
