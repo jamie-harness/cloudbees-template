@@ -1,8 +1,10 @@
+def SimpleMavenBuild
+
 pipeline {
     agent any
 
     tools {
-        maven 'Maven 3.6.3'
+        maven 'MavenV3.9.7'
     }
 
     stages {
@@ -15,39 +17,16 @@ pipeline {
         stage('Initialize') {
             steps {
                 script {
-<<<<<<< HEAD
-                    class SimpleMavenBuild implements Serializable {
-                        def steps
-=======
-                    buildScript = load "cloudbees-template/templates/MavenBuild/SimpleMavenBuild.groovy"
+                    buildScript = load "templates/MavenBuild/SimpleMavenBuild.groovy"
                 }
             }
         }
->>>>>>> parent of 6f2e4a2 (fixes)
 
-                        SimpleMavenBuild(steps) { this.steps = steps }
-
-                        def mavenBuild(String buildFile, String buildTarget) {
-                            steps.echo "Validating Build Parameters"
-
-                            if (checkMandatoryFields(buildFile)) {
-                                def mavenCommand = "mvn -f ${buildFile} ${buildTarget ?: 'install'}"
-                                steps.sh "cd ${steps.pwd()}; ${mavenCommand}"
-                            } else {
-                                steps.error "Build parameter validation failed."
-                            }
-                        }
-
-                        def checkMandatoryFields(def field) {
-                            if (field == null || field.trim().isEmpty()) {
-                                steps.echo "Build file parameter is blank"
-                                return false
-                            }
-                            return true
-                        }
-                    }
-
-                    def buildTool = new SimpleMavenBuild(this)
+        stage('Build') {
+            steps {
+                script {
+                    // Instantiate the SimpleMavenBuild class and call the mavenBuild method
+                    def buildTool = buildScript.SimpleMavenBuild(this)
                     buildTool.mavenBuild('pom.xml', 'install')
                 }
             }
@@ -56,7 +35,9 @@ pipeline {
 
     post {
         always {
+            // Archive the build artifacts
             archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
+            // Optionally, you can add steps here to notify on build status, clean up, etc.
         }
     }
 }
