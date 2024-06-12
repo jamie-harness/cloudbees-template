@@ -1,0 +1,44 @@
+def buildScript
+
+pipeline {
+    agent any
+
+    tools {
+        maven 'MavenV3.9.7' // Specify the Maven version installed in Jenkins
+        jdk 'OpenJDK 11'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/Anshika2203/maven-template-repository.git', branch: 'master'
+            }
+        }
+
+        stage('Initialize') {
+            steps {
+                script {
+                    buildScript = load "${env.WORKSPACE}/../MavenBuild/SimpleMavenBuild.groovy"
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    // Instantiate the SimpleMavenBuild class and call the mavenBuild method
+                    def buildTool = new buildScript.SimpleMavenBuild(this)
+                    buildTool.mavenBuild('pom.xml', 'install')
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Archive the build artifacts
+            archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
+            // Optionally, you can add steps here to notify on build status, clean up, etc.
+        }
+    }
+}
