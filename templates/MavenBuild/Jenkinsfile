@@ -5,7 +5,7 @@ pipeline {
 
     tools {
         maven 'MavenV3.9.7' // Specify the Maven version installed in Jenkins
-        jdk 'OpenJDK 11'
+        jdk 'OpenJDK9'
     }
 
     stages {
