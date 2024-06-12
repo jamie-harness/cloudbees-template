@@ -1,4 +1,4 @@
-def buildScript
+def SimpleMavenBuild
 
 pipeline {
     agent any
@@ -27,7 +27,7 @@ pipeline {
             steps {
                 script {
                     // Instantiate the SimpleMavenBuild class and call the mavenBuild method
-                    def buildTool = new buildScript.SimpleMavenBuild(this)
+                    def buildTool = buildScript.SimpleMavenBuild(this)
                     buildTool.mavenBuild('pom.xml', 'install')
                 }
             }
