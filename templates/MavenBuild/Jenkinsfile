@@ -15,8 +15,15 @@ pipeline {
         stage('Initialize') {
             steps {
                 script {
+<<<<<<< HEAD
                     class SimpleMavenBuild implements Serializable {
                         def steps
+=======
+                    buildScript = load "cloudbees-template/templates/MavenBuild/SimpleMavenBuild.groovy"
+                }
+            }
+        }
+>>>>>>> parent of 6f2e4a2 (fixes)
 
                         SimpleMavenBuild(steps) { this.steps = steps }
 
